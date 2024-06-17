@@ -1,0 +1,93 @@
+.mainContainer {
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+  }
+  
+  .titleContainer {
+    display: flex;
+    flex-direction: column;
+    font-size: 64px;
+    font-weight: bolder;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .resultContainer,
+  .historyItem {
+    flex-direction: row;
+    display: flex;
+    width: 400px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .historyContainer {
+    flex-direction: column;
+    display: flex;
+    height: 200px;
+    align-items: center;
+    flex-grow: 5;
+    justify-content: flex-start;
+  }
+  
+  .buttonContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 260px;
+  }
+  
+  .inputContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  
+  .inputContainer > .errorLabel {
+    color: red;
+    font-size: 14px;
+  }
+  
+  .inputBox {
+    height: 48px;
+    width: 400px;
+    font-size: large;
+    border-radius: 8px;
+    border: 1.5px solid #0C4E82;
+    padding-left: 8px;
+  }
+
+  .login-btn {
+	display: flex;
+	column-gap: 10px;
+	align-items: center;
+	height: 50px;
+	padding: 12px 24px;
+  font-size: 20px;
+	border-radius: 5px;
+	background-color: #0C4E82;
+	color: var(--white);
+	font-height: 600;
+
+	transition: opacity 0.8s ease-in;
+  cursor: pointer;
+}
+
+::placeholder {
+  color: #0C4E82;
+  opacity: 1;
+}
+
+.login-btn:hover {
+	opacity: 0.8;
+}
+
+.login-btn:active {
+	position: relative;
+	top: 1px;
+}
