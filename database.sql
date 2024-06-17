@@ -1,6 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
---SET TIME ZONE 'Europe/Moscow'; --не забыть в конф изменить
-SELECT CURRENT_TIMESTAMP;
+--SET TIME ZONE 'Europe/Moscow';
+--SELECT CURRENT_TIMESTAMP;
 
 -- Создание таблицы "Категории курсов"
 CREATE TABLE Categories (
@@ -11,20 +11,22 @@ CREATE TABLE Categories (
 -- Создание таблицы "Пользователи" с UUID
 CREATE TABLE Users (
     user_id UUID CONSTRAINT pk_users PRIMARY KEY DEFAULT uuid_generate_v4(),
-    name VARCHAR(64),
+    name VARCHAR(128) NOT NULL,
     email VARCHAR(64) NOT NULL,
-    isadmin BOOLEAN DEFAULT FALSE,
-    password VARCHAR(64) NOT NULL,
-    registration_at DATE,
-    about TEXT
+    isadmin BOOLEAN DEFAUL FALSE,
+    hashed_password TEXT NOT NULL,
+    registration_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+ 	about TEXT
 );
 
 -- Создание таблицы "Курсы"
 CREATE TABLE Courses (
     course_id SERIAL CONSTRAINT pk_courses PRIMARY KEY,
     title VARCHAR(64) NOT NULL,
-    description TEXT,
     price DECIMAL(10,2) CHECK (price >= 0),
+    description TEXT NOT NULL,
+    demo_path TEXT,
+    full_path TEXT,
     category_id INTEGER CONSTRAINT fk_courses_categories REFERENCES Categories(category_id)
 );
 
@@ -32,153 +34,217 @@ CREATE TABLE Courses (
 CREATE TABLE Purchases (
     purchase_id UUID CONSTRAINT pk_purchases PRIMARY KEY DEFAULT uuid_generate_v4(),
     purchase_time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    user_id UUID CONSTRAINT fk_purchases_users REFERENCES Users(user_id),
-    course_id INTEGER CONSTRAINT fk_purchases_courses REFERENCES Courses(course_id)
+    detail TEXT,
+    user_id UUID CONSTRAINT fk_purchases_users REFERENCES Users(user_id) NOT NULL,
+    course_id INTEGER CONSTRAINT fk_purchases_courses REFERENCES Courses(course_id) NOT NULL
 );
 
--- Создание таблицы "Психотерапевт"
---CREATE TABLE Therapist (
---    therapist_id SERIAL CONSTRAINT pk_therapist PRIMARY KEY,
---    name VARCHAR(64) NOT NULL,
---    contact_information TEXT
---);
-
 -- Создание таблицы "Записи к психотерапевту"
-CREATE TABLE TherapistAppointments (
+CREATE TABLE Appointments (
     appointment_id SERIAL CONSTRAINT pk_therapist_appointments PRIMARY KEY,
-    username VARCHAR(128) NOT NULL,
-    user_id UUID,
-    connect_method TEXT,
+	name TEXT NOT NULL,
+	user_id UUID CONSTRAINT fk_purchases_users REFERENCES Users(user_id), 
+    -- Если человек авторизован, будет отправляться с фронта 
+    connect_way TEXT,
     message TEXT
 );
 
 -- Создание таблицы "Комментарии к курсам"
 CREATE TABLE CourseComments (
     comment_id SERIAL CONSTRAINT pk_course_comments PRIMARY KEY,
-    comment_text TEXT,
+    comment_text TEXT NOT NULL,
     comment_time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    user_id UUID CONSTRAINT fk_course_comments_users REFERENCES Users(user_id),
-    course_id INTEGER CONSTRAINT fk_course_comments_courses REFERENCES Courses(course_id)
+    user_id UUID CONSTRAINT fk_course_comments_users REFERENCES Users(user_id) NOT NULL,
+    course_id INTEGER CONSTRAINT fk_course_comments_courses REFERENCES Courses(course_id) NOT NULL
 );
 
--- Создание таблицы "Доступы пользователей к курсам"
-CREATE TABLE UserAccessCourses (
-    user_id UUID CONSTRAINT fk_access_users REFERENCES Users(user_id),
-    course_id INTEGER CONSTRAINT fk_access_courses REFERENCES Courses(course_id)
+-- Создание таблицы "Доступ пользователей к курсам"
+create table UsercAccessCourses (
+ user_id uuid CONSTRAINT fk_access_users REFERENCES Users(user_id) NOT NULL,
+ course_id INTEGER CONSTRAINT fk_access_courses REFERENCES Courses(course_id) NOT NULL
 );
+
 
 -- Триггер для добавления пользователя и курса в таблицу access
+-- Функция триггера
 CREATE OR REPLACE FUNCTION add_user_course_access()
 RETURNS TRIGGER AS $$
 BEGIN
-    INSERT INTO UserAccessCourses (user_id, course_id)
+    INSERT INTO UsercAccessCourses (user_id, course_id)
     VALUES (NEW.user_id, NEW.course_id);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
+-- Создание триггера
 CREATE TRIGGER trg_add_user_course_access
 AFTER INSERT ON Purchases
 FOR EACH ROW
 EXECUTE FUNCTION add_user_course_access();
 
--- Процедуры для создания, удаления, обновления курсов и пользователей (просто для воды диплома)
 
--- Создание пользователя
-CREATE OR REPLACE FUNCTION create_user(
-    _name VARCHAR(64),
-    _email VARCHAR(64),
-    _isadmin BOOLEAN,
-    _password VARCHAR(64),
-    _about TEXT
+-- Процедуры для создания, удаления, обновления курсов, пользователей, комментариев
+CREATE OR REPLACE PROCEDURE create_course(
+    p_title VARCHAR,
+    p_price DECIMAL,
+    p_description TEXT,
+    p_demo_path TEXT,
+    p_full_path TEXT,
+    p_category_id INTEGER
 )
-RETURNS UUID AS $$
-DECLARE
-    _user_id UUID;
+LANGUAGE plpgsql
+AS $$
 BEGIN
-    INSERT INTO Users (name, email, isadmin, password, registration_at, about)
-    VALUES (_name, _email, _isadmin, _password, CURRENT_DATE, _about)
-    RETURNING user_id INTO _user_id;
-    RETURN _user_id;
+    INSERT INTO Courses (title, price, description, demo_path, full_path, category_id)
+    VALUES (p_title, p_price, p_description, p_demo_path, p_full_path, p_category_id);
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
--- Удаление пользователя
-CREATE OR REPLACE FUNCTION delete_user(_user_id UUID)
-RETURNS VOID AS $$
+
+CREATE OR REPLACE PROCEDURE delete_course(p_course_id INTEGER)
+LANGUAGE plpgsql
+AS $$
 BEGIN
-    DELETE FROM Users WHERE user_id = _user_id;
+    DELETE FROM Courses WHERE course_id = p_course_id;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
--- Обновление пользователя
-CREATE OR REPLACE FUNCTION update_user(
-    _user_id UUID,
-    _name VARCHAR(64),
-    _email VARCHAR(64),
-    _isadmin BOOLEAN,
-    _password VARCHAR(64),
-    _about TEXT
+
+CREATE OR REPLACE PROCEDURE update_course(
+    p_course_id INTEGER,
+    p_title VARCHAR,
+    p_price DECIMAL,
+    p_description TEXT,
+    p_demo_path TEXT,
+    p_full_path TEXT,
+    p_category_id INTEGER
 )
-RETURNS VOID AS $$
-BEGIN
-    UPDATE Users
-    SET name = _name, email = _email, isadmin = _isadmin, password = _password, about = _about
-    WHERE user_id = _user_id;
-END;
-$$ LANGUAGE plpgsql;
-
--- Создание курса
-CREATE OR REPLACE FUNCTION create_course(
-    _title VARCHAR(64),
-    _description TEXT,
-    _price DECIMAL(10,2),
-    _category_id INTEGER
-)
-RETURNS INTEGER AS $$
-DECLARE
-    _course_id INTEGER;
-BEGIN
-    INSERT INTO Courses (title, description, price, category_id)
-    VALUES (_title, _description, _price, _category_id)
-    RETURNING course_id INTO _course_id;
-    RETURN _course_id;
-END;
-$$ LANGUAGE plpgsql;
-
--- Удаление курса
-CREATE OR REPLACE FUNCTION delete_course(_course_id INTEGER)
-RETURNS VOID AS $$
-BEGIN
-    DELETE FROM Courses WHERE course_id = _course_id;
-END;
-$$ LANGUAGE plpgsql;
-
--- Обновление курса
-CREATE OR REPLACE FUNCTION update_course(
-    _course_id INTEGER,
-    _title VARCHAR(64),
-    _description TEXT,
-    _price DECIMAL(10,2),
-    _category_id INTEGER
-)
-RETURNS VOID AS $$
+LANGUAGE plpgsql
+AS $$
 BEGIN
     UPDATE Courses
-    SET title = _title, description = _description, price = _price, category_id = _category_id
-    WHERE course_id = _course_id;
+    SET title = p_title,
+        price = p_price,
+        description = p_description,
+        demo_path = p_demo_path,
+        full_path = p_full_path,
+        category_id = p_category_id
+    WHERE course_id = p_course_id;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
--- Вьюшка для просмотра записей к психотерапевтам
-CREATE VIEW TherapistAppointmentsView AS
-SELECT
-    ta.appointment_id,
-    ta.username,
-    ta.user_id,
-    ta.connect_method,
-    ta.message,
-    t.name AS therapist_name,
-    t.contact_information
-FROM TherapistAppointments ta
-JOIN Therapist t ON ta.therapist_id = t.therapist_id;
+
+
+
+CREATE OR REPLACE PROCEDURE create_user(
+    p_name VARCHAR,
+    p_email VARCHAR,
+    p_isadmin BOOLEAN,
+    p_hashed_password TEXT,
+    p_about TEXT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    INSERT INTO Users (name, email, isadmin, hashed_password, about)
+    VALUES (p_name, p_email, p_isadmin, p_hashed_password, p_about);
+END;
+$$;
+
+
+CREATE OR REPLACE PROCEDURE delete_user(p_user_id UUID)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    DELETE FROM Users WHERE user_id = p_user_id;
+END;
+$$;
+
+
+CREATE OR REPLACE PROCEDURE update_user(
+    p_user_id UUID,
+    p_name VARCHAR,
+    p_email VARCHAR,
+    p_isadmin BOOLEAN,
+    p_hashed_password TEXT,
+    p_about TEXT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    UPDATE Users
+    SET name = p_name,
+        email = p_email,
+        isadmin = p_isadmin,
+        hashed_password = p_hashed_password,
+        about = p_about
+    WHERE user_id = p_user_id;
+END;
+$$;
+
+
+
+CREATE OR REPLACE PROCEDURE create_comment(
+    p_comment_text TEXT,
+    p_user_id UUID,
+    p_course_id INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    INSERT INTO CourseComments (comment_text, user_id, course_id)
+    VALUES (p_comment_text, p_user_id, p_course_id);
+END;
+$$;
+
+
+CREATE OR REPLACE PROCEDURE delete_comment(p_comment_id INTEGER)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    DELETE FROM CourseComments WHERE comment_id = p_comment_id;
+END;
+$$;
+
+
+
+-- Вьюшка для просмотра записей к психотерапевту
+CREATE VIEW AppointmentsView AS
+SELECT 
+    appointment_id,
+    name,
+    user_id,
+    connect_way,
+    message
+FROM 
+    Appointments;
+
+
+
+-- Процедура для отображения на сайте комментариев к курсам 
+CREATE OR REPLACE FUNCTION get_course_comments(p_course_id INTEGER)
+RETURNS TABLE (
+    comment_id INTEGER,
+    comment_text TEXT,
+    comment_time TIMESTAMPTZ,
+    user_id UUID
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        comment_id,
+        comment_text,
+        comment_time,
+        user_id
+    FROM 
+        CourseComments
+    WHERE 
+        course_id = p_course_id;
+END;
+$$;
+
+
+
+
