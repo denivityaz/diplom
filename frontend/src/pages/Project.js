@@ -60,16 +60,9 @@ const Project = () => {
                 setLoading(false); 
             }
         };
-
-
-		
-
-
-
-
         fetchProjects();
     }, []); 
-	const buyProject = () => {
+	const buyProject = async() => {
 		const token = Cookies.get('token')
 		let config = {
 			headers: {
@@ -84,7 +77,8 @@ const Project = () => {
 		}
 		console.log(data);
 		console.log(token);
-		axios.post('https://sponq.ru:3332/api/purchase',data, config).then(res => {
+		await axios.post('https://sponq.ru:3332/api/purchase',data, config).then(res => {
+			console.log(res);
 			window.location.reload()
 		})
 	}
@@ -148,9 +142,9 @@ const Project = () => {
 								></textarea>
 			  				</div>
 			  				<div className="form-buttons">
-								<button type="submit" onClick={buyProject} className="submit-btn">
+								<div onClick={buyProject} className="submit-btn">
 				  				Купить
-								</button>
+								</div>
 								<button type="button" onClick={closeModal} className="close-btn">
 				  				Закрыть
 								</button>
