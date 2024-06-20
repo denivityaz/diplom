@@ -25,7 +25,7 @@ const RegistrationForm = (props) => {
       "about": ""
     }
     setLoading(true)
-    axios.post('https://sponq.ru:3332/api/user', data).then(response => {
+    axios.post('http://185.218.0.16:3333/api/user', data).then(response => {
       setLoading(false)
       const res = response.data
       console.log(res);

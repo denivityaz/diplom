@@ -71,7 +71,7 @@ const Header = () => {
 				authorization: token, 
 			}
 		}
-		axios.post('https://sponq.ru:3332/api/appointment',data, config).then(res => {
+		axios.post('http://185.218.0.16:3333/api/appointment',data, config).then(res => {
 			console.log(res);
 			setIsSubmit(true)
 		})

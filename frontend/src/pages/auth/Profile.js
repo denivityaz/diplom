@@ -28,7 +28,7 @@ const Profile = () => {
     Cookies.set('name', name)
     Cookies.set('email', email)
     Cookies.set('about', about)
-    axios.put("https://sponq.ru:3332/api/user", data, config);
+    axios.put("http://185.218.0.16:3333/api/user", data, config);
   };
   const onButtonClick = () => {
     Cookies.remove("id");

@@ -18,7 +18,7 @@ const Projects = () => {
 						authorization: token, 
 					}
 				}
-                const response = await axios.get('https://sponq.ru:3332/api/course/',config);
+                const response = await axios.get('http://185.218.0.16:3333/api/course/',config);
 				const projects = response.data.sort((a,b) => b.userHave - a.userHave )
                 setProjects(projects); 
                 setLoading(false); 

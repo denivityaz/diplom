@@ -219,7 +219,17 @@ body {
 	column-gap: 30px;
 	row-gap: 30px;
 }
-
+.btn_group{
+	display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    flex-direction: row;
+    width: 100%;
+}
+.white{
+	background-color: white;
+}
 .project {
 	transition-duration: 350ms;
 }
