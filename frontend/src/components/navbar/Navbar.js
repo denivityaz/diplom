@@ -3,7 +3,6 @@ import BtnDarkMode from '../btnDarkMode/BtnDarkMode';
 import React, { useState, useEffect } from 'react';
 import './style.css';
 import Cookies from 'js-cookie';
-import axios from 'axios';
 
 const Navbar = () => {
 	const activeLink = 'nav-list__link nav-list__link--active';
@@ -20,14 +19,9 @@ const Navbar = () => {
 					return
 				}
 				const id = Cookies.get('id')
-				let config = {
-					headers: {
-						authorization: token, 
-					}
-				}
-                const response = await axios.get('https://sponq.ru:3332/api/user/'+id, config);
-				console.log(response);
-                setUser(response.data); 
+				const isadmin = Cookies.get('isadmin')
+				console.log(isadmin);
+                setUser({id, isadmin}); 
                 setLoading(false); 
             } catch (err) {
                 setError(err.message); 
@@ -60,7 +54,18 @@ const Navbar = () => {
 								Главная
 							</NavLink>
 						</li>
-
+						{user.isadmin == 'true' ? (
+								<NavLink
+									to="/course_edit"
+									className={({ isActive }) =>
+										isActive ? activeLink : normalLink
+									}
+								>
+									Редактировать курсы
+								</NavLink>
+							) : (
+								''
+							)}
 						<li className="nav-list__item">
 							<NavLink
 								to="/projects"
@@ -82,14 +87,25 @@ const Navbar = () => {
 							</NavLink>
 						</li>
 						<li className="nav-list__item">
-							<NavLink
-								to="/login"
-								className={({ isActive }) =>
-									isActive ? activeLink : normalLink
-								}
-							>
-								Аккаунт
-							</NavLink>
+						{user.id ? (
+								<NavLink
+									to="/account"
+									className={({ isActive }) =>
+										isActive ? activeLink : normalLink
+									}
+								>
+									Аккаунт
+								</NavLink>
+							) : (
+								<NavLink
+									to="/login"
+									className={({ isActive }) =>
+										isActive ? activeLink : normalLink
+									}
+								>
+									Auth
+								</NavLink>
+							)}
 						</li>
 					</ul>
 				</div>

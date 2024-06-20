@@ -73,11 +73,13 @@ const Login = (props) => {
         if(err === 'Не верный пароль') setPasswordError(err)
         if(err === 'Не верный email') setEmailError(err)
       }else{
-        const token = res.token
-        const id = res.id
+        const {token} = res
+        const {email, isadmin, id} = res.user
         Cookies.set('token', token, {expires: 7})
         Cookies.set('id', id, {expires: 7})
+        Cookies.set('isadmin', isadmin, {expires: 7})
         navigate("/");
+        window.location.reload()
       }
     })
   }
