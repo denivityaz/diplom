@@ -53,7 +53,7 @@ const Profile = () => {
                                     <label className="title-2" htmlFor="name">Зарегистрирован</label>
                                     <p></p>
                                     </li>
-                                    <button className='btn'>Выйти</button>     
+                                    <button onClick={onButtonClick}  className='btn'>Выйти</button>     
                            </ul>
                        </div>
                    </main>
