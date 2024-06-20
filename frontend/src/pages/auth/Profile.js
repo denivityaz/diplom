@@ -1,25 +1,18 @@
+import Cookies from 'js-cookie';
 import React, { useState } from 'react';
 
-
-// const Profile = ({ user }) => {
-//     const [name, setName] = useState(user.name);
-//     const [email, setEmail] = useState(user.email);
-//     const [registrationAt] = useState(user.registration_at);
-//     const [about, setAbout] = useState(user.about || '');
-
-//     const handleSubmit = (event) => {
-//         event.preventDefault();
-//         // Add your form submission logic here
-//         console.log({
-//             name,
-//             email,
-//             registrationAt,
-//             about
-//         });
-//     };
+import { useNavigate, Link} from 'react-router-dom'
 
 
 const Profile = () => {
+  const navigate = useNavigate()
+    const onButtonClick = () => {
+        Cookies.remove('id')
+        Cookies.remove('isadmin')
+        Cookies.remove('token')
+        window.location.reload()
+        navigate('/')
+    }
 	return (
         			<main className="section">
                        <div className="container">
@@ -55,12 +48,12 @@ const Profile = () => {
                                     <li className="content-list__item">
                                     <label className="title-2" htmlFor="name">Роль</label>
                                     <p></p>
-                                    </li>
+                                    </li> 
                                     <li className="content-list__item">
                                     <label className="title-2" htmlFor="name">Зарегистрирован</label>
                                     <p></p>
                                     </li>
-                                    <button className='btn'>Выйти</button>     
+                                    <button onClick={onButtonClick}  className='btn'>Выйти</button>     
                            </ul>
                        </div>
                    </main>

@@ -89,7 +89,7 @@ const Navbar = () => {
 						<li className="nav-list__item">
 						{user.id ? (
 								<NavLink
-									to="/account"
+									to="/profile"
 									className={({ isActive }) =>
 										isActive ? activeLink : normalLink
 									}
