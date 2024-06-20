@@ -1,28 +1,55 @@
+import React, { useState, useEffect } from 'react';
 import Project from '../components/project/Project';
-import {projects} from "./../helpers/projectsList"
-
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const Projects = () => {
-	return (
-		<main className="section_animated">
-			<div className="container">
-				<h2 className="title-1">Курсы</h2>
-				<ul className="projects">
-					{projects.map((project, index) => {
-						return (
-								<Project
-								key={index}
-								title={project.title}
-								img={project.img}
-								video={project.video}
-								index={index}
-							/>
-						);
-					})}
-				</ul>
-			</div>
-		</main>
-	);
+    const [projects, setProjects] = useState([]);
+    const [loading, setLoading] = useState(true); 
+    const [error, setError] = useState(null); 
+
+    useEffect(() => {
+		
+        const fetchProjects = async () => {
+            try {
+				const token = Cookies.get('token')
+				let config = {
+					headers: {
+						authorization: token, 
+					}
+				}
+                const response = await axios.get('https://sponq.ru:3332/api/course/',config);
+                setProjects(response.data); 
+                setLoading(false); 
+            } catch (err) {
+                setError(err.message); 
+                setLoading(false); 
+            }
+        };
+
+        fetchProjects();
+    }, []); 
+    if (loading) return <div>Загрузка...</div>; 
+    if (error) return <div>Ошибка: {error}</div>; 
+
+    return (
+        <main className="section_animated">
+            <div className="container">
+                <h2 className="title-1">Курсы</h2>
+                <ul className="projects">
+                    {projects.map((project, index) => (
+                        <Project
+                            key={index}
+                            title={project.title}
+                            img={project.img_path}
+                            video={project.full_path}
+                            index={project.id}
+                        />
+                    ))}
+                </ul>
+            </div>
+        </main>
+    );
 };
 
 export default Projects;

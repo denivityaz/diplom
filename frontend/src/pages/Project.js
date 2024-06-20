@@ -1,11 +1,30 @@
+import React, { useState, useEffect } from 'react';
 import {useParams} from "react-router-dom";
 import PayBtn from "../components/btnPay/PayBtn";
-import {projects} from "./../helpers/projectsList"
+import axios from 'axios';
+import parse from 'html-react-parser';
 
 const Project = () => {
 	const {id} = useParams();
-	const project = projects[id];
+    const [project, setProjects] = useState([]);
+    const [loading, setLoading] = useState(true); 
+    const [error, setError] = useState(null); 
+    useEffect(() => {
+        const fetchProjects = async () => {
+            try {
+                const response = await axios.get('https://sponq.ru:3332/api/course/'+id);
+                setProjects(response.data); 
+                setLoading(false); 
+            } catch (err) {
+                setError(err.message); 
+                setLoading(false); 
+            }
+        };
 
+        fetchProjects();
+    }, []); 
+    if (loading) return <div>Загрузка...</div>; 
+    if (error) return <div>Ошибка: {error}</div>; 
     return (
 		<main className="section_animated">
 			<div className="container">
@@ -17,25 +36,24 @@ const Project = () => {
 						alt={project.title}
 						className="project-details__cover"
 					/> */}
-					<video
-						controls="true"
-            			source src={project.video}
-						type="video/mp4"
+					<iframe
+            			src={project.full_path || project.demo_path}
             			width='1280'
             			height='720'
-            			autoPlay
 						className="project-details__cover"
-            			// muted
-            			playsInline
-						poster= {project.imgBig}
+						frameBorder="0" 
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+						referrerPolicy="strict-origin-when-cross-origin" 
+						title={project.title}
+						allowFullScreen
 			        />
 
 					<div className="project-details__desc">
 						<h2 className="title-2">Описание</h2>
-						<p>{project.skills}</p>
+						{parse(project.description)}
 					</div>
 
-					{project.payLink && (
+					{project.demo_path && (
 						<PayBtn link="" />
 					)}
 				</div>

@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
 import "./style.css"
+
 
 const RegistrationForm = (props) => {
   const [email, setEmail] = useState('')
@@ -10,9 +13,27 @@ const RegistrationForm = (props) => {
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [confirmPasswordError, setConfirmPasswordError] = useState('')
+  const [loading, setLoading] = useState(false); 
 
   const navigate = useNavigate()
-
+  const registerUser = () => {
+    const data = {
+      "name": '',
+      "email": email,
+      "isadmin": false,
+      "hashed_password": password,
+      "about": ""
+    }
+    setLoading(true)
+    axios.post('https://sponq.ru:3332/api/user', data).then(response => {
+      setLoading(false)
+      const res = response.data
+      console.log(res);
+      if(res.message){
+        navigate('/login')
+      }
+    })
+  }
   const onButtonClick = () => {
     // Set initial error values to empty
     setEmailError('')
@@ -50,7 +71,7 @@ const RegistrationForm = (props) => {
       return
     }
 
-    // Authentication calls will be made here...
+    registerUser()
   }
 
   return (

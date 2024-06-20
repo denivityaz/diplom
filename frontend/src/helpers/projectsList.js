@@ -16,6 +16,8 @@ import project05Big from "./../img/projects/05-big.jpg";
 import project06 from "./../img/projects/06.jpg";
 import project06Big from "./../img/projects/06-big.jpg";
 
+
+
 const projects = [
 	{
 		title: 'Гештальт',
