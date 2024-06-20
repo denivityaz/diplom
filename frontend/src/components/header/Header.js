@@ -1,6 +1,8 @@
 import React, { useState, useEffect} from 'react';
 import Modal from 'react-modal';
 import './style.css';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
 Modal.setAppElement('#root');
 
@@ -11,6 +13,7 @@ const Header = () => {
 	const [contactMethod, setContactMethod] = useState('');
 	const [message, setMessage] = useState('');
 	const [contactError, setContactError] = useState('');
+	const [isSubmit, setIsSubmit] = useState(false);
   
 	useEffect(() => {
 	  if (modalIsOpen) {
@@ -52,8 +55,27 @@ const Header = () => {
 	  console.log('Способ связи:', contactMethod);
 	  console.log('Сообщение:', message);
 	  closeModal();
+
 	};
-  
+	const push = () => {
+		const id = Cookies.get('id')
+		const token = Cookies.get('token')
+		const data = {
+			"name": name,
+			"user_id": id,
+			"connect_way": contactMethod,
+			"message": message
+		}
+		let config = {
+			headers: {
+				authorization: token, 
+			}
+		}
+		axios.post('https://sponq.ru:3332/api/appointment',data, config).then(res => {
+			console.log(res);
+			setIsSubmit(true)
+		})
+	  }
 	return (
 	  <header className="header">
 		<div className="header__wrapper">
@@ -74,7 +96,13 @@ const Header = () => {
 			contentLabel="Форма записи"
 			closeTimeoutMS={300}
 		  >
+			{!isSubmit && 
 			<h2 className="title-2">Записаться к психотерапевту</h2>
+			}
+			{isSubmit && 
+			<h2 className="title-2">Спасибо. Мы свяжемся с вами</h2>
+			}
+			{!isSubmit && 
 			<form onSubmit={handleSubmit} className="form">
 			  <div className="form-group">
 				<p className='modal-p'>Имя:</p>
@@ -110,14 +138,15 @@ const Header = () => {
 				></textarea>
 			  </div>
 			  <div className="form-buttons">
-				<button type="submit" className="submit-btn">
+				<div onClick={push} type="submit" className="submit-btn">
 				  Отправить
-				</button>
+				</div>
 				<button type="button" onClick={closeModal} className="close-btn">
 				  Закрыть
 				</button>
 			  </div>
 			</form>
+			}
 		  </Modal>
 		  <button className="btn" onClick={openModal}>Попасть ко мне</button>
 		</div>

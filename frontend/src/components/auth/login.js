@@ -76,6 +76,7 @@ const Login = (props) => {
         const {token} = res
         const {email, isadmin, id} = res.user
         Cookies.set('token', token, {expires: 7})
+        Cookies.set('email', email, {expires: 7})
         Cookies.set('id', id, {expires: 7})
         Cookies.set('isadmin', isadmin, {expires: 7})
         navigate("/");
