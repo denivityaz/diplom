@@ -13,6 +13,7 @@ import ScrollToTop from "./utils/scrollToTop"
 import Registration from "./pages/auth/Registration"
 import Login from "./pages/auth/Login";
 import Profile from "./pages/auth/Profile";
+import course_edit from "./components/admin/course_edit";
 
 import ProtectedRoute from "./utils/ProtectedRoute";
 
@@ -34,9 +35,16 @@ function App() {
 						element={
 						<ProtectedRoute>
 							<Profile />
+							<updateCourse />
 						</ProtectedRoute>
-						} 
-					/>
+						} />
+					<Route 
+						path="/course_edit" 
+						element={
+						<ProtectedRoute>
+							<course_edit />
+						</ProtectedRoute>
+						} />
 				</Routes>
 				<Footer />
 			</Router>

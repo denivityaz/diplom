@@ -1,0 +1,28 @@
+/* ButtonStyles.css */
+
+.button {
+    padding: 10px 20px;
+    background-color: #4CAF50; /* Зеленый цвет фона */
+    color: white; /* Белый цвет текста */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: #45a049; /* Темно-зеленый при наведении */
+  }
+  
+  .add-button {
+    background-color: #4CAF50; /* Зеленый цвет фона для кнопки "Добавить" */
+  }
+  
+  .edit-button {
+    background-color: #008CBA; /* Синий цвет фона для кнопки "Редактировать" */
+  }
+  
+  .delete-button {
+    background-color: #f44336; /* Красный цвет фона для кнопки "Удалить" */
+  }
+  
