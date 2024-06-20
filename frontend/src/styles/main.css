@@ -230,6 +230,35 @@ body {
 .white{
 	background-color: white;
 }
+.appointments {
+	margin: 20px;
+  }
+  
+  .appointments-list {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	align-items: center;
+  }
+  
+  .appointment {
+	border: 1px solid #ccc;
+	padding: 10px;
+	border-radius: 5px;
+	width: fit-content;
+	text-align: left;
+  }
+  
+  .appointment h3 {
+	margin: 0;
+	font-size: 30px;
+
+  }
+  
+  .appointment p {
+	margin: 5px 0;
+	font-size: 25px;
+  }
 .project {
 	transition-duration: 350ms;
 }

@@ -34,7 +34,11 @@ const Project = () => {
   }, [modalIsOpen, editModalIsOpen]);
 
   const openModal = () => {
+    const token = Cookies.get("token");
+    if(token)
     setModalIsOpen(true);
+    else
+    navigate('/login')
   };
 
   const closeModal = () => {

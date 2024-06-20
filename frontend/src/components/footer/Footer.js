@@ -13,7 +13,7 @@ const Footer = () => {
 				<div className="footer__wrapper">
 					<ul className="social">
 						<li className="social__item">
-							<a href="#!">
+							<a href="https://vk.com/id2030456">
 								<img src={vk} alt="Link" />
 							</a>
 						</li>
@@ -28,7 +28,7 @@ const Footer = () => {
 							</a>
 						</li>
 						<li className="social__item">
-							<a href="#!">
+							<a href="https://github.com/denivityaz/diplom">
 								<img src={gitHub} alt="Link" />
 							</a>
 						</li>

@@ -50,17 +50,17 @@ const Login = (props) => {
       return
     }
   
-    // if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{1,1}$/.test(email)) {
-    //   setEmailError('Ошибка, введите правильный адрес почты')
-    //   return
-    // }
+    if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+      setEmailError('Ошибка, введите правильный адрес почты')
+      return
+    }
   
     if ('' === password) {
       setPasswordError('Введите пароль')
       return
     }
   
-    if (password.length < 1) {
+    if (password.length < 4) {
       setPasswordError('Пароль должен быть не меньше 8 символов')
       return
     }
