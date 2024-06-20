@@ -19,7 +19,8 @@ const Projects = () => {
 					}
 				}
                 const response = await axios.get('https://sponq.ru:3332/api/course/',config);
-                setProjects(response.data); 
+				const projects = response.data.sort((a,b) => b.userHave - a.userHave )
+                setProjects(projects); 
                 setLoading(false); 
             } catch (err) {
                 setError(err.message); 
@@ -44,6 +45,7 @@ const Projects = () => {
                             img={project.img_path}
                             video={project.full_path}
                             index={project.id}
+							userHave={project.userHave}
                         />
                     ))}
                 </ul>

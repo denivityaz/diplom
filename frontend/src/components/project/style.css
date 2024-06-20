@@ -4,7 +4,9 @@
 	box-shadow: var(--box-shadow);
 	border-radius: 10px;
 }
-
+.project.have {
+	background: green;
+}
 .project__img {
 	border-radius: 10px;
 	width: 1000px; /* Установите нужную ширину */
