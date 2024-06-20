@@ -53,14 +53,8 @@ const Profile = () => {
 			                            ></textarea>
                                          </li>
                                     <li className="content-list__item">
-                                    <label className="title-2" htmlFor="name">Роль</label>
-                                    <p></p>
+                                    <button className='btn'>Изменить</button><button className='btn'>Выйти</button> 
                                     </li>
-                                    <li className="content-list__item">
-                                    <label className="title-2" htmlFor="name">Зарегистрирован</label>
-                                    <p></p>
-                                    </li>
-                                    <button className='btn'>Выйти</button>     
                            </ul>
                        </div>
                    </main>
