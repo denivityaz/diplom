@@ -74,7 +74,9 @@ const Login = (props) => {
         if(err === 'Не верный email') setEmailError(err)
       }else{
         const token = res.token
+        const id = res.id
         Cookies.set('token', token, {expires: 7})
+        Cookies.set('id', id, {expires: 7})
         navigate("/");
       }
     })

@@ -3,16 +3,23 @@ import {useParams} from "react-router-dom";
 import PayBtn from "../components/btnPay/PayBtn";
 import axios from 'axios';
 import parse from 'html-react-parser';
+import Cookies from 'js-cookie';
 
 const Project = () => {
 	const {id} = useParams();
-    const [project, setProjects] = useState([]);
+    const [project, setProjects] = useState();
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState(null); 
     useEffect(() => {
         const fetchProjects = async () => {
             try {
-                const response = await axios.get('https://sponq.ru:3332/api/course/'+id);
+				const token = Cookies.get('token')
+				let config = {
+					headers: {
+						authorization: token, 
+					}
+				}
+                const response = await axios.get('https://sponq.ru:3332/api/course/'+id,config);
                 setProjects(response.data); 
                 setLoading(false); 
             } catch (err) {
