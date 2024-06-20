@@ -14,7 +14,12 @@
 	object-fit: cover; /* Изображение будет обрезано по краям, чтобы заполнить заданную область */
 	display: block; /* Чтобы убрать возможные лишние отступы вокруг изображения */
 }
-
+.link_project{
+	display: flex;
+}
+.link_project.project{
+	flex: 1;
+}
 .project__title {
 	padding: 15px 20px 25px;
 	font-weight: 700;

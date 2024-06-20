@@ -5,6 +5,7 @@ import axios from 'axios';
 import parse from 'html-react-parser';
 import Cookies from 'js-cookie';
 import Modal from 'react-modal';
+import { useNavigate, Link} from 'react-router-dom'
 
 const Project = () => {
 	const {id} = useParams();
@@ -14,9 +15,12 @@ const Project = () => {
 	const [modalIsOpen, setModalIsOpen] = useState(false);
 	const [modalAnimationClass, setModalAnimationClass] = useState('');
 	const [name, setName] = useState('');
+	const [text, setText] = useState('');
 	const [contactMethod, setContactMethod] = useState('');
 	const [message, setMessage] = useState('');
 	const [contactError, setContactError] = useState('');
+	const navigate = useNavigate()
+
 	useEffect(() => {
 		if (modalIsOpen) {
 		  setModalAnimationClass('modal--open');
@@ -56,15 +60,28 @@ const Project = () => {
                 setLoading(false); 
             }
         };
-
-
-		
-
-
-
-
         fetchProjects();
     }, []); 
+	const buyProject = async() => {
+		const token = Cookies.get('token')
+		let config = {
+			headers: {
+				authorization: token, 
+			}
+		}
+		const user_id = Cookies.get('id')
+		const data = {
+			"detail": text,
+			"user_id": user_id,
+			"course_id": id
+		}
+		console.log(data);
+		console.log(token);
+		await axios.post('https://sponq.ru:3332/api/purchase',data, config).then(res => {
+			console.log(res);
+			window.location.reload()
+		})
+	}
     if (loading) return <div>Загрузка...</div>; 
     if (error) return <div>Ошибка: {error}</div>; 
     return (
@@ -109,8 +126,8 @@ const Project = () => {
 							// onSubmit={handleSubmit} 
 							className="form">
 			  				<div className="form-group">
-								<p className='modal-p'>Название:</p>
-								<p className='modal-p'>Цена:</p>
+								<p className='modal-p'>Название: {project.title}</p>
+								<p className='modal-p'>Цена: {project.price}</p>
 			  				</div>
 			  				<div className="form-group">
 								{contactError && <p className="error-message">{contactError}</p>}
@@ -118,16 +135,16 @@ const Project = () => {
 			  				<div className="form-group">
 			  				<p className='modal-p'>Данные карты:</p>
 								<textarea
-				  				// value={message}
-				  				// onChange={(e) => setMessage(e.target.value)}
+								value={text}
+								onChange={(ev) => setText(ev.target.value)}
 				  				placeholder="Номер карты СVV"
 				  				required
 								></textarea>
 			  				</div>
 			  				<div className="form-buttons">
-								<button type="submit" className="submit-btn">
+								<div onClick={buyProject} className="submit-btn">
 				  				Купить
-								</button>
+								</div>
 								<button type="button" onClick={closeModal} className="close-btn">
 				  				Закрыть
 								</button>
