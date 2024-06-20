@@ -15,6 +15,10 @@ const Navbar = () => {
         const fetchUser = async () => {
             try {
 				const token = Cookies.get('token')
+				if(!token) {
+					setLoading(false)
+					return
+				}
 				const id = Cookies.get('id')
 				let config = {
 					headers: {
