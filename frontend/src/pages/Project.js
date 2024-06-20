@@ -18,10 +18,11 @@ const Project = () => {
 						className="project-details__cover"
 					/> */}
 					<video
-            			src={project.video}
+						controls="true"
+            			source src={project.video}
+						type="video/mp4"
             			width='1280'
             			height='720'
-            			controls
             			autoPlay
 						className="project-details__cover"
             			// muted

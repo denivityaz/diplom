@@ -1,5 +1,5 @@
-import project01 from "./../img/projects/01.jpg";
-import project01Big from "./../img/projects/01-big.jpg";
+import project01 from "./../img/Courses/1.jpg";
+import project01Big from "./../img/Courses/1.jpg";
 
 import project02 from "./../img/projects/02.jpg";
 import project02Big from "./../img/projects/02-big.jpg";
@@ -18,11 +18,11 @@ import project06Big from "./../img/projects/06-big.jpg";
 
 const projects = [
 	{
-		title: 'Гештальт Часть первая',
+		title: 'Гештальт',
 		skills: 'React, Node.js, MongoDB',
 		img: project01,
 		imgBig: project01Big,
-		video: 'https://ik.imagekit.io/ikmedia/example_video.mp4',
+		video: 'https://www.youtube.com/watch?v=WOrBLFIes9Y',
 		payLink: 'https://github.com',
 	},
 	{

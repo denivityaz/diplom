@@ -49,8 +49,9 @@
   }
   
   .inputContainer > .errorLabel {
-    color: red;
+    color: #DC3545;
     font-size: 14px;
+    margin-top: 5px;
   }
   
   .inputBox {
@@ -72,8 +73,6 @@
 	border-radius: 5px;
 	background-color: #0C4E82;
 	color: var(--white);
-	font-height: 600;
-
 	transition: opacity 0.8s ease-in;
   cursor: pointer;
 }

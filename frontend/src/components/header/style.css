@@ -48,3 +48,174 @@
 .header__text p + p {
 	margin-top: 0.5em;
 }
+
+
+/* CSS для анимации модального окна */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalFadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+}
+
+.modal {
+  opacity: 0;
+  transform: translateY(-50px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.modal--open {
+  opacity: 1;
+  transform: translateY(0);
+  animation: modalFadeIn 0.3s forwards;
+}
+
+.modal--close {
+  opacity: 0;
+  transform: translateY(-50px);
+  animation: modalFadeOut 0.3s forwards;
+}
+
+
+.open-modal-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .open-modal-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .modal {
+    width: 90%;
+    max-width: 500px;
+    margin: auto;
+    background: #F5F5F5;
+    padding: 30px;
+    border-radius: 10px;
+    resize: none; 
+    position: relative;
+    ::placeholder{
+      color: #CCCCCC;
+    }
+  }
+  
+  .dark{
+    .modal {
+    background: #06263E;
+	::placeholder {
+	color: #CCCCCC;
+	}
+    }
+    .title-2 {
+        color: white;
+    }
+}
+  .overlay {
+    background-color: rgba(0, 0, 0, 0.75);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+
+  .form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .modal-p {
+    margin-bottom: 10px;
+    font-weight: bold;
+	font-size: large;
+  }
+  
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+	outline: none !important;
+  }
+  
+  textarea {
+    height: 150px;
+  }
+  
+  .form-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .submit-btn,
+  .close-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .submit-btn {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .submit-btn:hover {
+    background-color: #218838;
+  }
+
+  .submit-btn:active {
+	position: relative;
+	top: 1px;
+  }
+
+   .close-btn:active {
+	position: relative;
+	top: 1px;
+}
+  
+  .close-btn {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .close-btn:hover {
+    background-color: #c82333;
+  }
+  ::placeholder {
+	color: #CCCCCC;
+	opacity: 1;
+  }
