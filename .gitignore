@@ -7,3 +7,4 @@ backend/node_modules
 frontend/node_modules/.cache/default-development/index.pack
 frontend/node_modules/.cache/default-development/index.pack.old
 frontend/node_modules/.cache/.eslintcache
+build
