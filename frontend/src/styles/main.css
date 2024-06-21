@@ -120,6 +120,7 @@ body {
 	background-position: center;
 	background-repeat: no-repeat;
 	color: var(--text-color);
+	flex: 1;
 }
 
 .section_contact{
@@ -239,7 +240,7 @@ body {
 	flex-direction: column;
 	gap: 10px;
 	align-items: center;
-  }
+}
   
   .appointment {
 	border: 1px solid #ccc;

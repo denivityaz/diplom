@@ -34,7 +34,7 @@ const Appointment = () => {
   if (loading) return <div>Загрузка...</div>;
   if (error) return <div>Ошибка: {error}</div>;
   return (
-    <main className="section_contact">
+    <main className="section_animated">
       <div className="container">
         <div className="appointments-list">
           {projects.map((appointment) => (

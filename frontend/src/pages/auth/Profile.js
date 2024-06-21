@@ -44,7 +44,7 @@ const Profile = () => {
   },[])
   return (
     
-    <main className="section">
+    <main className="section_animated">
       <div className="container">
         <ul className="content-list">
           <h2 className="title-1">Профиль</h2>
@@ -81,10 +81,10 @@ const Profile = () => {
               required
             ></textarea>
           </li>
-          <div onClick={updateUser} className="btn">
+          <div onClick={updateUser} className="submit-btn">
             Обновить данные
           </div>
-          <button onClick={onButtonClick} className="btn">
+          <button onClick={onButtonClick} className="close-btn">
             Выйти
           </button>
         </ul>
