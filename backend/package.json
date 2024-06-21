@@ -1,0 +1,52 @@
+{
+  "devDependencies": {
+    "@eslint/js": "^9.5.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/compression": "^1.7.5",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/express-fileupload": "^1.5.0",
+    "@types/morgan": "^1.9.9",
+    "@types/pg": "^8.11.6",
+    "eslint": "^9.5.0",
+    "globals": "^15.6.0",
+    "sequelize-cli": "^6.6.2",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.13.1"
+  },
+  "name": "graduate_work",
+  "version": "0.0.1",
+  "description": "psychologist's website with authorization and purchase of the course",
+  "main": "server.ts",
+  "scripts": {
+    "test": "npm run server",
+    "migrate": "npx sequelize db:migrate",
+    "seed": "npx sequelize-cli db:seed:all"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/denivityaz/diplom.git"
+  },
+  "keywords": [
+    "denis"
+  ],
+  "author": "krasmags@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/denivityaz/diplom/issues"
+  },
+  "homepage": "https://github.com/denivityaz/diplom#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-fileupload": "^1.5.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "pg": "^8.12.0",
+    "sequelize": "^6.37.3"
+  }
+}
